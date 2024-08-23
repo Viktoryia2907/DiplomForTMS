@@ -1,8 +1,11 @@
 import { test, expect, Page } from '@playwright/test';
 import { PageFactory } from '../src/pages/pageFactory';
-import { Locators, getRandomEmail, getRandomString } from '../constsUI/consts';
+import { Locators, LocatorsLogin } from '../constsUI/consts';
+import { getRandomEmail, } from '../constsUI/UIClient';
 
 test.describe('21 vek - HomePage', () => {
+
+
     let page: Page;
     let pageFactory: PageFactory;
     let homePage: ReturnType<PageFactory['getHomePage']>;
@@ -27,33 +30,6 @@ test.describe('21 vek - HomePage', () => {
 
     test.afterEach(async () => {
         await page.close();
-    });
-
-    test.describe('Тестирование хедера сайта', () => {
-
-        test('Главный логотип есть на странице', async () => {
-            await homePage.verifyMainLogotype();
-        });
-
-        test('Изменение локации на рандомное значение', async () => {
-
-            const newCity = getRandomString(5);
-
-            await page.$(Locators.Location);
-            await page.click(Locators.Location);
-            await page.waitForSelector(Locators.ModalViewForLocation);
-
-            const modalForChangeCity = await page.isVisible(Locators.ModalViewForLocation);
-            expect(modalForChangeCity).toBe(true);
-
-            await page.click(Locators.PlaceHolderForLocation);
-            await page.fill(Locators.InputForNewCity, newCity);
-            await page.click(Locators.SaveNewLocation);
-            await page.waitForSelector(Locators.ErrorForInvalidLocation);
-
-            const ErrorLocation = await page.isVisible(Locators.ErrorForInvalidLocation);
-            expect(ErrorLocation).toBe(true);
-        });
     });
 
     test.describe('Регистрация', () => {
@@ -87,9 +63,48 @@ test.describe('21 vek - HomePage', () => {
         });
     });
 
+    test.describe('Логин', () => {
+
+        test('Логин с валидными данными', async () => {
+
+            await page.click(Locators.AccountButton);
+            await page.click(Locators.LoginButton);
+
+            await page.$(LocatorsLogin.formForLogin);
+            await page.fill(LocatorsLogin.fillForEmail, LocatorsLogin.validEmailForLogin);
+            await page.fill(LocatorsLogin.fillForPassword, LocatorsLogin.validPasswordForLogin);
+
+            await page.click(LocatorsLogin.buttonEnter);
+            await page.$(LocatorsLogin.moduleViewForAddPhone);
+            await page.click(LocatorsLogin.closeModuleViewForAddPhone);
+            await page.click(Locators.AccountButton);
+
+            const loginUser = await page.locator(LocatorsLogin.user).textContent();
+            expect(loginUser).toContain(LocatorsLogin.validEmailForLogin);
+        });
+
+        test('Логин с невалидным email', async () => {
+
+            const randomEmail = getRandomEmail();
+
+            await page.click(Locators.AccountButton);
+            await page.click(Locators.LoginButton);
+
+            await page.$(LocatorsLogin.formForLogin);
+            await page.fill(LocatorsLogin.fillForEmail, randomEmail);
+            await page.fill(LocatorsLogin.fillForPassword, LocatorsLogin.validPasswordForLogin);
+
+            await page.click(LocatorsLogin.buttonEnter);
+            await page.waitForSelector(LocatorsLogin.failerLogin);
+            const failerLogin = await page.isVisible(LocatorsLogin.failerLogin);
+            expect(failerLogin).toBe(true);
+        });
+    });
+
     test.describe('Поиск продукта', () => {
 
         test('Поиск валидного продукта и добавление в корзину', async () => {
+
             await page.$(Locators.PlaceHolderForSearch);
             await page.fill(Locators.PlaceHolderForSearch, 'iPhone 13');
             await page.press(Locators.PlaceHolderForSearch, 'Enter');

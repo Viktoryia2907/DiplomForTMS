@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { getPostLinkById } from '../constsAPI/consts';
-import { fetchDeleteResponse, fetchGetResponse } from '../constsAPI/APIFunctions';
+import { fetchDeleteResponse, fetchGetResponse } from '../constsAPI/APIClient';
 
 
 test.describe('Delete Requests', () => {

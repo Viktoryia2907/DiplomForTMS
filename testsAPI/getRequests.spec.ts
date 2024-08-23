@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { URLS, getPostCommentsLinkById } from '../constsAPI/consts';
-import { fetchGetResponse } from '../constsAPI/APIFunctions';
+import { fetchGetResponse } from '../constsAPI/APIClient';
 
 test.describe('GET Requests', () => {
 

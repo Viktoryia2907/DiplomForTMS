@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './basePage';
 import { NavigationBar } from '../elements/navigationBar';
-import { URLS } from '../../constsUI/consts';
+import { URLS, Locators } from '../../constsUI/consts';
 
 export class HomePage extends BasePage {
     private homeURL: string;
@@ -12,7 +12,7 @@ export class HomePage extends BasePage {
         super(page);
         this.navigationBar = new NavigationBar(page);
         this.homeURL = URLS.BASE_URL;
-        this.mainLogotype = '.logotype';
+        this.mainLogotype = Locators.Logotype;
     }
 
     async navigateTo(): Promise<void> {

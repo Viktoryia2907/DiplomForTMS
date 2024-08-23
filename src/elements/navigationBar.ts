@@ -1,4 +1,6 @@
 import { Page } from '@playwright/test';
+import { Locators } from '../../constsUI/consts';
+
 
 export class NavigationBar {
     private page: Page;
@@ -9,6 +11,6 @@ export class NavigationBar {
 
     async goToCatalogPage(): Promise<void> {
         console.log('Navigating to catalog page');
-        await this.page.click('button.styles_catalogButton__z9L_j span');
+        await this.page.click(Locators.ButtonForCatalog);
     }
 }

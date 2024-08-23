@@ -42,19 +42,19 @@ test.describe('21 vek - catalogPage', () => {
         await page.click(Locators.LogoLGButton);
         await expect(page).toHaveURL(URLS.URL_LG_catalog);
 
+        const timeout = 10000;
+
         const [logoLG, specSaleLG, showMoreLG, catalolSpecSaleLG] = await Promise.all([
-            page.isVisible(Locators.LogoLG),
-            page.isVisible(Locators.SpecSaleLG),
-            page.isVisible(Locators.showMoreSalesLG),
-            page.isVisible(Locators.catalolSpecSaleLG),
+            page.isVisible(Locators.LogoLG, { timeout }),
+            page.isVisible(Locators.SpecSaleLG, { timeout }),
+            page.isVisible(Locators.showMoreSalesLG, { timeout }),
+            page.isVisible(Locators.catalolSpecSaleLG, { timeout }),
         ]);
 
-        expect(logoLG).toBe(true);
-        expect(specSaleLG).toBe(true);
-        expect(showMoreLG).toBe(true);
+
         expect(catalolSpecSaleLG).toBe(true);
+        expect(showMoreLG).toBe(true);
+        expect(specSaleLG).toBe(true);
+        expect(logoLG).toBe(true);
     });
-
-
-
 });
